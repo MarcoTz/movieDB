@@ -17,7 +17,7 @@ Dialog::~Dialog()
 
 void Dialog::on_cancel_clicked()
 {
-    close();
+    done(1);
 }
 
 void Dialog::on_search_clicked()
@@ -33,5 +33,5 @@ void Dialog::on_search_clicked()
         }
     }
     emit startSearch(searchStr,searchRow);
-    this->hide();
+    done(1);
 }

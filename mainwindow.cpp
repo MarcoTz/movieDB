@@ -39,9 +39,6 @@ void MainWindow::LoadDB(){
 
     changedItems.clear();
 
-    searchDialog = new Dialog(this);
-    connect(searchDialog,SIGNAL(startSearch(QString,int)),this,SLOT(searchDB(QString,int)));
-
     QSqlQuery query;
     query.exec("SELECT COUNT(*) FROM movie");
     query.next();
@@ -84,6 +81,8 @@ void MainWindow::model_itemChanged(QStandardItem *item)
 
 void MainWindow::on_search_clicked()
 {
+    searchDialog = new Dialog(this);
+    connect(searchDialog,SIGNAL(startSearch(QString,int)),this,SLOT(searchDB(QString,int)));
     searchDialog->show();
 }
 
@@ -132,4 +131,26 @@ void MainWindow::fillTable(int rows,QSqlQuery query)
         model->setItem(count,2,items[2].last());
         count++;
     }
+}
+
+//new movie clicked
+void MainWindow::on_pushButton_clicked()
+{
+    int maxNr = 0;
+    QSqlQuery query;
+    query.exec("SELECT nr FROM movie order BY nr DESC LIMIT 1");
+    query.next();
+    maxNr = query.value(0).toInt()+1;
+
+    addmovie = new newmovie(this,maxNr);
+    connect(addmovie,SIGNAL(addMovie(QString,QString)),this,SLOT(movieAdded(QString,QString)));
+    addmovie->show();
+}
+
+void MainWindow::movieAdded(QString name, QString nr)
+{
+    QSqlQuery query;
+    query.exec("INSERT INTO movie (name,nr) VALUES(\""+name+"\","+nr+")");
+    query.next();
+    LoadDB();
 }

@@ -5,6 +5,7 @@
 #include <QtSql>
 #include <QStandardItemModel>
 #include "dialog.h"
+#include "newmovie.h"
 
 namespace Ui {
 class MainWindow;
@@ -34,6 +35,10 @@ private slots:
 
     void searchDB(QString, int);
 
+    void on_pushButton_clicked();
+
+    void movieAdded(QString,QString);
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;
@@ -42,6 +47,7 @@ private:
     QList<QStandardItem *> items [3];
     QList<QStandardItem *> changedItems;
     Dialog *searchDialog;
+    newmovie *addmovie;
 
     void fillTable(int,QSqlQuery);
 
